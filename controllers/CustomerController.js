@@ -2,7 +2,13 @@ const { Customer, Account } = require('../models');
 
 class CustomerController {
   static getShowAllCustomerHandler(req, res) {
-    // TODO: GET data Customers
+    Customer.findAll({
+      order: [['fullName', 'ASC']]
+    })
+      .then(customerData => {
+        res.render('customer', { customerData });
+      })
+      .catch(errors => { res.send(errors) });
   }
 
   static getRegisterCustomerHandler(req, res) {
