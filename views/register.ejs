@@ -1,0 +1,38 @@
+<%- include('partials/header', { pageType: 'Home', pageTitle: 'Bank Glasgow Fox' }) %>
+
+<section>
+  <form action="/customers/register" method="post">
+    <div style="margin: 15px 0;">
+      <label for="identityNumber">ID Number: </label> <br>
+      <input type="text" name="identityNumber" id="identityNumber">
+    </div>
+    <div style="margin: 15px 0;">
+      <label for="fullName">Full Name: </label> <br>
+      <input type="text" name="fullName" id="fullName">
+    </div>
+    <div style="margin: 15px 0;">
+      <label for="address">Address: </label> <br>
+      <input type="text" name="address" id="address">
+    </div>
+    <div style="margin: 15px 0;">
+      <label for="birthDate">ID Number: </label> <br>
+      <input type="date" name="birthDate" id="birthDate">
+    </div>
+    <div style="margin: 15px 0;">
+      <p>Gender: </p>
+      <div>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+      </div>
+      <div>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+      </div>
+    </div>
+    <div>
+      <button type="submit" style="font-size: 15px;">REGISTER</button>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
