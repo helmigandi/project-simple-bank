@@ -18,5 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Customer',
   });
+  Customer.addHook('beforeCreate', 'defaultValueForBirthDate', (instance, options) => {
+    if (!instance.birthDate) {
+      instance.birthDate = '2000-01-01';
+    }
+  });
   return Customer;
 };
