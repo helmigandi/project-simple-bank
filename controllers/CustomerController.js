@@ -12,11 +12,15 @@ class CustomerController {
   }
 
   static getRegisterCustomerHandler(req, res) {
-    // TODO: GET Form untuk menambahkan data Customer
+    res.render('register');
   }
 
   static postRegisterCustomerHandler(req, res) {
-    // TODO: POST Form untuk menambahkan data Customer
+    const { identityNumber, fullName, address, birthDate, gender } = req.body;
+        
+    Customer.create({ identityNumber, fullName, address, birthDate, gender })
+      .then(() => { res.redirect('/customers') })
+      .catch(errors => { res.send(errors) });
   }
 
   static getEditCustomerHandler(req, res) {
