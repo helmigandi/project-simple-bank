@@ -1,8 +1,8 @@
 {
   "name": "project-simple-bank",
   "version": "1.0.0",
-  "description": "Kamu akan membuat aplikasi system bank sederhana menggunakan Express dan Sequelize. Baca tiap specification dengan baik, ikuti apa yang diminta.",
-  "main": "index.js",
+  "description": "Project with Express JS, Postgres, Sequelize and EJS.",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
