@@ -17,18 +17,32 @@ class CustomerController {
 
   static postRegisterCustomerHandler(req, res) {
     const { identityNumber, fullName, address, birthDate, gender } = req.body;
-        
+
     Customer.create({ identityNumber, fullName, address, birthDate, gender })
       .then(() => { res.redirect('/customers') })
       .catch(errors => { res.send(errors) });
   }
 
   static getEditCustomerHandler(req, res) {
-    // TODO: GET Mengupdate data profile Customer
+    const id = req.params.idCustomer;
+
+    Customer.findOne({ where: { id } })
+      .then(customerData => {
+        // make birthDate: YYYY-MM-DD
+        const newBirthDate = customerData.getBirthDate;
+        res.render('profile', { customerData, newBirthDate })
+      })
+      .catch(errors => { res.send(errors) });
   }
 
   static postEditCustomerHandler(req, res) {
-    // TODO: POST Mengupdate data profile Customer
+    const id = req.params.idCustomer;
+    const { identityNumber, fullName, address, birthDate, gender } = req.body;
+    
+    Customer.update({ identityNumber, fullName, address, birthDate, gender },
+      { where: { id } })
+      .then(() => { res.redirect('/customers') })
+      .catch(errors => { res.send(errors) });
   }
 
   static getCustomerAccountHandler(req, res) {
@@ -43,13 +57,13 @@ class CustomerController {
   static getTransferHandler(req, res) {
     // TODO: GET form untuk transfer ke Account lain
   }
-  
-  static postTransferHandler(req, res){
+
+  static postTransferHandler(req, res) {
     // TODO: POST form untuk transfer ke Account lain
   }
 
   // Develepment Only
-  static getDeleteCustomerHandler(req, res){
+  static getDeleteCustomerHandler(req, res) {
     // TODO: GET delete one custmer data
   }
 }
