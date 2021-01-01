@@ -7,6 +7,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Customer.hasMany(models.Account);
     }
+    get getBirthDate() {
+      // make birthDate: YYYY-MM-DD
+      const dateData = this.birthDate;
+      const birthday = [
+        dateData.getFullYear(),
+        ('0' + (dateData.getMonth() + 1)).slice(-2),
+        ('0' + dateData.getDate()).slice(-2)
+      ].join('-');
+      return birthday;
+    }
   };
   Customer.init({
     identityNumber: DataTypes.STRING,
