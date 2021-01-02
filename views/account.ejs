@@ -36,6 +36,8 @@
   <h2>ADD NEW ACCOUNT</h2>
 </section>
 
+<%- include('partials/errorMessages', { errorMessages }) %>
+
 <!-- Form for create data account -->
 <section style="text-align: center;">
   <form action="/customers/<%= customerData.id %>/accounts" method="post">

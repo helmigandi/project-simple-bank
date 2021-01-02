@@ -1,6 +1,8 @@
 <%- include('partials/header', { pageType: 'Home', pageTitle: 'Bank Glasgow Fox' }) %>
 
-<section>
+<%- include('partials/errorMessages', { errorMessages }) %>
+
+<section style="text-align: center;">
   <form action="/customers/<%= customerData.id %>/editProfile" method="post">
     <div style="margin: 15px 0;">
       <label for="identityNumber">ID Number: </label> <br>
