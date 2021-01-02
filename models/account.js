@@ -10,17 +10,37 @@ module.exports = (sequelize, DataTypes) => {
   };
   Account.init({
     type: DataTypes.STRING,
-    balance: DataTypes.FLOAT,
+    balance: {
+      type: DataTypes.FLOAT,
+      validate: {
+        min: {
+          args: 500000,
+          msg: 'Minimum balance for new Accout: Rp500.000'
+        },
+        defaultValue(value){
+          if (!value) {
+            this.balance = 500000;
+          }
+        },
+        isNumber(value){
+          // only accept number
+          const checkNumber = new Number(value)
+          if (isNaN(checkNumber)) {
+            throw new Error('Balance must be number');
+          }
+        }
+      }
+    },
     accountNumber: DataTypes.STRING,
     CustomerId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Account',
   });
-  Account.addHook('beforeCreate', 'addAccountNumber', (instance, options) => { 
+  Account.addHook('beforeCreate', 'addAccountNumber', (instance, options) => {
     instance.accountNumber = Math.random()
       .toString()
-      .slice(2,12);
+      .slice(2, 12);
   })
   return Account;
 };
