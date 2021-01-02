@@ -38,7 +38,7 @@ class CustomerController {
   static postEditCustomerHandler(req, res) {
     const id = req.params.idCustomer;
     const { identityNumber, fullName, address, birthDate, gender } = req.body;
-    
+
     Customer.update({ identityNumber, fullName, address, birthDate, gender },
       { where: { id } })
       .then(() => { res.redirect('/customers') })
@@ -46,12 +46,21 @@ class CustomerController {
   }
 
   static getCustomerAccountHandler(req, res) {
-    // TODO : - GET data Account yang dibuka oleh Customer tersebut
-    //        - GET Form untuk menambah Account
+    const id = req.params.idCustomer;
+    Customer.findOne({ where: { id }, include: Account })
+      .then(customerData => {
+        // console.log(JSON.stringify(customerData, null, 2));
+        res.render('account', { customerData });
+      })
+      .catch(errors => { res.send(errors) });
   }
 
   static postCustomerAccountHandler(req, res) {
-    // TODO : POST Form untuk menambah Account
+    const id = req.params.idCustomer;
+    const { type, balance } = req.body;
+    Account.create({ type, balance, CustomerId: id })
+      .then(() => res.redirect(`/customers/${id}/accounts`))
+      .catch(errors => { res.send(errors) });
   }
 
   static getTransferHandler(req, res) {
