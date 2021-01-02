@@ -20,7 +20,7 @@
           <td><%= customer.identityNumber %></td>
           <td><%= customer.fullName %></td>
           <td>
-            <a href="#">View Account</a> || 
+            <a href="/customers/<%= customer.id %>/accounts">View Account</a> || 
             <a href="/customers/<%= customer.id %>/editProfile">Edit Profile</a> || 
             <a href="#">Delete</a>
           </td>
