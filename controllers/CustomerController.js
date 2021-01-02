@@ -1,4 +1,5 @@
 const { Customer, Account } = require('../models');
+const idrBalance = require('../helpers/currency.js');
 
 class CustomerController {
   static getShowAllCustomerHandler(req, res) {
@@ -72,8 +73,7 @@ class CustomerController {
 
     Customer.findOne({ where: { id }, include: Account })
       .then(customerData => {
-        // console.log(JSON.stringify(customerData, null, 2));
-        res.render('account', { customerData, errorMessages });
+        res.render('account', { customerData, errorMessages, idrBalance });
       })
       .catch(errors => { res.send(errors) });
   }
