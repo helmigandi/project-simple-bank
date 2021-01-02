@@ -17,5 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Account',
   });
+  Account.addHook('beforeCreate', 'addAccountNumber', (instance, options) => { 
+    instance.accountNumber = Math.random()
+      .toString()
+      .slice(2,12);
+  })
   return Account;
 };
