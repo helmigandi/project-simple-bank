@@ -1,0 +1,60 @@
+<%- include('partials/header', { pageType: 'Customers', pageTitle: 'Accounts' }) %>
+
+<section style="text-align: center; margin: 15px 0;">
+  <h2>Good Day, <%= customerData.fullName %></h2>
+</section>
+
+<!-- Table show Customer data accounts -->
+<section style="font-size: 18px;">
+  <table border="1" style="margin: auto;"> 
+    <thead>
+      <tr>
+        <th>Account Number</th>
+        <th>Type</th>
+        <th>Balance</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Start JS Code -->
+      <% customerData.Accounts.forEach(customer => { %>
+        <tr>
+          <td><%= customer.accountNumber %></td>
+          <td><%= customer.type %></td>
+          <td><%= customer.balance %></td>
+          <td>
+            <a href="#">Transfer</a>
+          </td>
+        </tr>        
+      <% }); %>
+      <!-- End JS Code -->
+    </tbody>
+  </table>
+</section>
+
+<section style="margin: 15px 0; text-align: center;">
+  <h2>ADD NEW ACCOUNT</h2>
+</section>
+
+<!-- Form for create data account -->
+<section style="text-align: center;">
+  <form action="/customers/<%= customerData.id %>/accounts" method="post">
+    <div style="margin: 15px 0;">
+      <label for="type">Account Type: </label> <br>
+      <select name="type" id="type">
+        <option value="On Account">On Account</option>
+        <option value="Xtra Payroll">Xtra Payroll</option>
+        <option value="Tabunganku">Tabunganku</option>
+      </select>
+    </div>
+    <div style="margin: 15px 0;">
+      <label for="balance">Balance: </label> <br>
+      <input type="text" name="balance" id="balance" placeholder="0">
+    </div>
+    <div>
+      <button type="submit" style="font-size: 15px;">ADD NEW ACCOUNT</button>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
