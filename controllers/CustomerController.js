@@ -12,7 +12,11 @@ class CustomerController {
   }
 
   static getRegisterCustomerHandler(req, res) {
-    res.render('register');
+    let errorMessages = [];
+    if (req.query.errorMessages) {
+      errorMessages = req.query.errorMessages.split(',');
+    }
+    res.render('register', { errorMessages });
   }
 
   static postRegisterCustomerHandler(req, res) {
@@ -20,17 +24,26 @@ class CustomerController {
 
     Customer.create({ identityNumber, fullName, address, birthDate, gender })
       .then(() => { res.redirect('/customers') })
-      .catch(errors => { res.send(errors) });
+      .catch(errorData => {
+        const errorMessages = errorData.errors.map(err => {
+          return err.message;
+        });
+        res.redirect(`/customers/register?errorMessages=${errorMessages}`);
+      });
   }
 
   static getEditCustomerHandler(req, res) {
     const id = req.params.idCustomer;
+    let errorMessages = [];
+    if (req.query.errorMessages) {
+      errorMessages = req.query.errorMessages.split(',');
+    }
 
     Customer.findOne({ where: { id } })
       .then(customerData => {
         // make birthDate: YYYY-MM-DD
         const newBirthDate = customerData.getBirthDate;
-        res.render('profile', { customerData, newBirthDate })
+        res.render('profile', { customerData, newBirthDate, errorMessages })
       })
       .catch(errors => { res.send(errors) });
   }
@@ -39,18 +52,28 @@ class CustomerController {
     const id = req.params.idCustomer;
     const { identityNumber, fullName, address, birthDate, gender } = req.body;
 
-    Customer.update({ identityNumber, fullName, address, birthDate, gender },
+    Customer.update({ id, identityNumber, fullName, address, birthDate, gender },
       { where: { id } })
       .then(() => { res.redirect('/customers') })
-      .catch(errors => { res.send(errors) });
+      .catch(errorData => {
+        const errorMessages = errorData.errors.map(err => {
+          return err.message;
+        });
+        res.redirect(`/customers/${id}/editProfile?errorMessages=${errorMessages}`);
+      });
   }
 
   static getCustomerAccountHandler(req, res) {
     const id = req.params.idCustomer;
+    let errorMessages = [];
+    if (req.query.errorMessages) {
+      errorMessages = req.query.errorMessages.split(',');
+    }
+
     Customer.findOne({ where: { id }, include: Account })
       .then(customerData => {
         // console.log(JSON.stringify(customerData, null, 2));
-        res.render('account', { customerData });
+        res.render('account', { customerData, errorMessages });
       })
       .catch(errors => { res.send(errors) });
   }
@@ -60,7 +83,12 @@ class CustomerController {
     const { type, balance } = req.body;
     Account.create({ type, balance, CustomerId: id })
       .then(() => res.redirect(`/customers/${id}/accounts`))
-      .catch(errors => { res.send(errors) });
+      .catch(errorData => {
+        const errorMessages = errorData.errors.map(err => {
+          return err.message;
+        });
+        res.redirect(`/customers/${id}/accounts?errorMessages=${errorMessages}`);
+      });
   }
 
   static getTransferHandler(req, res) {
