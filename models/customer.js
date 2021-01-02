@@ -1,4 +1,5 @@
 'use strict';
+const { promiseImpl } = require('ejs');
 const {
   Model
 } = require('sequelize');
@@ -19,10 +20,44 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Customer.init({
-    identityNumber: DataTypes.STRING,
-    fullName: DataTypes.STRING,
+    identityNumber: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Identity Number must be filled'
+        },
+        len: {
+          args: [16, 20],
+          msg: 'Identity Number minimum 16 characters and maximum 20 characters'
+        },
+        isDuplicate(value) {
+          return Customer.findOne({ where: { identityNumber: value } })
+            .then((customerData) => {
+              if (customerData && this.id !== customerData.id) throw new Error('Duplicate Identity Number');
+            });
+        }
+      }
+    },
+    fullName: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Full name must be filled'
+        }
+      }
+    }, 
     address: DataTypes.STRING,
-    birthDate: DataTypes.DATE,
+    birthDate: {
+      type: DataTypes.DATE,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'Birth Date must be filled'
+        }
+      }
+    },
     gender: DataTypes.STRING
   }, {
     sequelize,
