@@ -13,7 +13,4 @@ router.post('/:idCustomer/editProfile', Controller.postEditCustomerHandler);
 router.post('/:idCustomer/accounts', Controller.postCustomerAccountHandler);
 router.post('/:idCustomer/accounts/:idAccount/transfer', Controller.postTransferHandler);
 
-// development only
-router.get('/:idCustomer/delete', Controller.getDeleteCustomerHandler);
-
 module.exports = router;

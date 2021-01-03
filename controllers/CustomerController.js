@@ -170,11 +170,6 @@ class CustomerController {
         res.redirect(`/customers/${idCustomer}/accounts/${idTransferFrom}/transfer?errorMessages=${errorMessages}`);
       });
   }
-
-  // Develepment Only
-  static getDeleteCustomerHandler(req, res) {
-    // TODO: GET delete one custmer data
-  }
 }
 
 module.exports = CustomerController;
