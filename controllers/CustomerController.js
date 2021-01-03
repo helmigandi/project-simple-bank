@@ -92,11 +92,83 @@ class CustomerController {
   }
 
   static getTransferHandler(req, res) {
-    // TODO: GET form untuk transfer ke Account lain
+    const idCustomer = req.params.idCustomer;
+    const idAccount = req.params.idAccount;
+    let accountDataFromOneCustomer;
+    let errorMessages = [];
+
+    if (req.query.errorMessages) {
+      errorMessages = req.query.errorMessages.split(',');
+    }
+    Account.findOne({ where: { id: idAccount } })
+      .then(accountData => {
+        accountDataFromOneCustomer = accountData;
+        return Account.findAll({
+          order: [['accountNumber', 'ASC']],
+          include: Customer
+        })
+      })
+      .then(allAccountData => {
+        // Add exception: User cannot send to same account
+        // So, make new array for account without the same account
+        let filterAllAccountData = [];
+        allAccountData.forEach(accountData => {
+          if (accountData.id !== accountDataFromOneCustomer.id) {
+            filterAllAccountData.push(accountData);
+          }
+        });
+        res.render('transfer', {
+          accountDataFromOneCustomer,
+          errorMessages,
+          idCustomer,
+          filterAllAccountData,
+          idrBalance
+        });
+      })
+      .catch(errorData => { res.send(errorData) });
   }
 
   static postTransferHandler(req, res) {
-    // TODO: POST form untuk transfer ke Account lain
+    const idCustomer = req.params.idCustomer;
+    const idTransferFrom = req.params.idAccount;
+    const idTransferTo = req.body.idTransferTo;
+    const amount = Number(req.body.amount);
+
+    Account.findOne({ where: { id: idTransferFrom } })
+      .then(accountDataTransferFrom => {
+        accountDataTransferFrom.balance = accountDataTransferFrom.balance - amount;
+        return accountDataTransferFrom.update({ balance: accountDataTransferFrom.balance }, {
+          where: {
+            id: accountDataTransferFrom.id
+          }
+        })
+      })
+      .then(() => {
+        return Account.findOne({ where: { id: idTransferTo } })
+      })
+      .then(accountDataTransferTo => {
+        accountDataTransferTo.balance = accountDataTransferTo.balance + amount;
+        return accountDataTransferTo.update({ balance: accountDataTransferTo.balance }, {
+          where: {
+            id: accountDataTransferTo.id
+          }
+        })
+      })
+      .then(() => {
+        res.redirect(`/customers/${idCustomer}/accounts/`);
+      })
+      .catch(errorData => {
+        let errorMessages = [];
+        // Check Error from Hooks or Validation
+        if (errorData.errors) { // Error From Validation
+          errorMessages = errorData.errors.map(err => {
+            return err.message;
+          });
+        } else { // Error From Hooks
+          errorMessages.push(errorData.message)
+        }
+        res.redirect(`/customers/${idCustomer}/accounts/${idTransferFrom}/transfer?errorMessages=${errorMessages}`);
+      });
   }
 
   // Develepment Only
