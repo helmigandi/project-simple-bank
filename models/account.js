@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: {
           args: 500000,
-          msg: 'Minimum balance for new Accout: Rp500.000'
+          msg: 'Minimum balance for new Accout: Rp 500.000'
         },
-        defaultValue(value){
+        defaultValue(value) {
           if (!value) {
             this.balance = 500000;
           }
         },
-        isNumber(value){
+        isNumber(value) {
           // only accept number
           const checkNumber = new Number(value)
           if (isNaN(checkNumber)) {
@@ -41,6 +41,11 @@ module.exports = (sequelize, DataTypes) => {
     instance.accountNumber = Math.random()
       .toString()
       .slice(2, 12);
-  })
+  });
+  Account.addHook('beforeValidate', 'updateBalance', (instance, options) => {
+    if (instance.balance < 0) {
+      throw new Error('Insufficient balance');
+    }
+  });
   return Account;
 };
