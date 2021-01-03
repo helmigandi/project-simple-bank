@@ -1,0 +1,32 @@
+<%- include('partials/header', { pageType: 'Account', pageTitle: 'Transfer' }) %>
+
+<section style="text-align: center; margin: 15px 0;">
+  <p>Transfer From: <strong><%= accountDataFromOneCustomer.accountNumber %> - <%= accountDataFromOneCustomer.type %> - <%= idrBalance(accountDataFromOneCustomer.balance) %></strong></p>
+</section>
+
+<%- include('partials/errorMessages', { errorMessages }) %>
+
+<!-- Form for create data account -->
+<section style="text-align: center;">
+  <form action="/customers/<%= idCustomer %>/accounts/<%= accountDataFromOneCustomer.id %>/transfer" method="post">
+    <div style="margin: 15px 0;">
+      <label for="amount">Amount: </label> <br>
+      <input type="text" name="amount" id="amount" placeholder="0">
+    </div>
+    <div style="margin: 15px 0;">
+      <label for="idTransferTo">Transfer to: </label> <br>
+      <select name="idTransferTo" id="idTransferTo">
+        <!-- Start JS Code -->
+        <% filterAllAccountData.forEach(account => { %>
+          <option value="<%= account.id %>"><%= account.accountNumber %> - <%= account.Customer.fullName %></option>
+        <% }); %>
+        <!-- End JS Code -->
+      </select>
+    </div>
+    <div>
+      <button type="submit" style="font-size: 15px;">TRANSFER</button>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
