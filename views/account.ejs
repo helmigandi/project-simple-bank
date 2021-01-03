@@ -17,15 +17,15 @@
     </thead>
     <tbody>
       <!-- Start JS Code -->
-      <% customerData.Accounts.forEach(customer => { %>
+      <% customerData.Accounts.forEach(account => { %>
         <tr>
-          <td><%= customer.accountNumber %></td>
-          <td><%= customer.type %></td>
-          <td><%= idrBalance(customer.balance) %></td>
+          <td><%= account.accountNumber %></td>
+          <td><%= account.type %></td>
+          <td><%= idrBalance(account.balance) %></td>
           <td>
-            <a href="#">Transfer</a>
+            <a href="/customers/<%= customerData.id %>/accounts/<%= account.id %>/transfer">Transfer</a>
           </td>
-        </tr>        
+        </tr>
       <% }); %>
       <!-- End JS Code -->
     </tbody>
